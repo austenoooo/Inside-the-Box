@@ -93,13 +93,6 @@ function addContentPlane(){
   videoTexture.wrapT = THREE.RepeatWrapping;
   videoTexture.repeat.set(1, 1);
 
-  let textureLoader = new THREE.TextureLoader();
-  let disp = textureLoader.load("./textures/displacement.png");
-
-  disp.wrapS = THREE.RepeatWrapping;
-  disp.wrapT = THREE.RepeatWrapping;
-  disp.repeat.set(1, 1);
-
   contentPlane = new THREE.Mesh(new THREE.PlaneGeometry(18.5, 17.5), new THREE.MeshBasicMaterial({ map: videoTexture, displacementMap: videoTexture}));
   scene.add(contentPlane);
   contentPlane.rotateX(-Math.PI/2);
@@ -180,6 +173,7 @@ function loop() {
 init();
 
 let boxPage = document.getElementById("box");
+let text = document.getElementById("text");
 
 document.addEventListener("scroll", (event) => {
 
@@ -197,5 +191,12 @@ document.addEventListener("scroll", (event) => {
     let ratio = window.scrollY / (window.innerHeight * 1.8);
     camera.position.set(43 - 42 * ratio, 60 - 40 * ratio, 43 - 42 * ratio);
     camera.lookAt(0, 10 - 10 * ratio, 0)
+  }
+
+  if (window.scrollY >= window.innerHeight * 0.3){
+    text.style.opacity = 0;
+  }
+  else{
+    text.style.opacity = 1;
   }
 });
