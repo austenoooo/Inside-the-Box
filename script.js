@@ -116,8 +116,8 @@ function postProcessing() {
 
   const effectFXAA = new ShaderPass(FXAAShader);
   effectFXAA.uniforms["resolution"].value.set(
-    1 / window.innerWidth,
-    1 / window.innerHeight
+    1 / window.innerWidth / 2,
+    1 / window.innerHeight / 2
   );
   composer.addPass(effectFXAA);
 
