@@ -4,6 +4,11 @@ import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
+
 let scene, camera, renderer;
 let controls;
 let box;
@@ -15,6 +20,8 @@ let modelLoader = new GLTFLoader();
 let composer;
 
 let effect;
+
+let contentPlane;
 
 function init() {
   scene = new THREE.Scene();
@@ -38,7 +45,7 @@ function init() {
     1000
   );
 
-  // controls = new OrbitControls(camera, renderer.domElement);
+  controls = new OrbitControls(camera, renderer.domElement);
 
   camera.position.set(40, 60, 40);
   camera.lookAt(0, 10, 0);
@@ -59,11 +66,13 @@ function init() {
 
   // environmentMap();
 
-  // postProcessing();
+  postProcessing();
 
   loadGradientMap();
 
   loadBoxModel();
+
+  
 
   // addGround();
 
@@ -76,6 +85,45 @@ function environmentMap() {
     texture.mapping = THREE.EquirectangularReflectionMapping;
     scene.environment = texture;
   });
+}
+
+function addContentPlane(){
+  let video = document.getElementById("myVideo");
+  let videoTexture = new THREE.VideoTexture(video);
+
+  videoTexture.wrapS = THREE.RepeatWrapping;
+  videoTexture.wrapT = THREE.RepeatWrapping;
+  videoTexture.repeat.set(1, 1);
+
+  let textureLoader = new THREE.TextureLoader();
+  let disp = textureLoader.load("./textures/displacement.png");
+
+  disp.wrapS = THREE.RepeatWrapping;
+  disp.wrapT = THREE.RepeatWrapping;
+  disp.repeat.set(1, 1);
+
+  contentPlane = new THREE.Mesh(new THREE.PlaneGeometry(18.5, 17.5), new THREE.MeshStandardMaterial({ map: videoTexture, displacementMap: videoTexture}));
+  scene.add(contentPlane);
+  contentPlane.rotateX(-Math.PI/2);
+  contentPlane.rotateZ(Math.PI/27);
+  contentPlane.position.set(1.0, 16, 0);
+}
+
+function postProcessing() {
+  // post processing
+  composer = new EffectComposer(renderer);
+
+  const renderPass = new RenderPass(scene, camera);
+  composer.addPass(renderPass);
+
+  const effectFXAA = new ShaderPass(FXAAShader);
+  effectFXAA.uniforms["resolution"].value.set(
+    1 / window.innerWidth,
+    1 / window.innerHeight
+  );
+  composer.addPass(effectFXAA);
+
+  loop();
 }
 
 // function addGround() {
@@ -113,6 +161,8 @@ function loadBoxModel(){
     });
 
     scene.add(box);
+
+    addContentPlane();
   }, undefined, 
   function (e) {
     console.error(e);
@@ -122,9 +172,9 @@ function loadBoxModel(){
 
 function loop() {
 
-  // renderer.render(scene, camera);
+  renderer.render(scene, camera);
   // composer.render();
-  effect.render( scene, camera );
+  // effect.render( scene, camera );
 
   window.requestAnimationFrame(loop);
 }

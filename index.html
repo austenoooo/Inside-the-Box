@@ -6,6 +6,12 @@
       margin: 0;
       padding: 0;
     }
+
+    #myVideo{
+      position: absolute;
+      z-index: -1;
+      visibility: hidden;
+    }
   </style>
   <body>
     <script
@@ -25,6 +31,10 @@
 
     <!-- <script type="module" src="content.js"></script> -->
     <script type="module" src="script.js"></script>
+
+    <video id="myVideo" controls autoplay muted loop width="250" height="250">
+      <source src="./textures/content.mp4" type="video/mp4" />
+    </video>
   
   </body>
 </html>
