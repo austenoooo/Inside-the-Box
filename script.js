@@ -32,7 +32,7 @@ function init() {
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-  document.body.appendChild(renderer.domElement);
+  document.getElementById("box").appendChild(renderer.domElement);
 
   let backgroundColor = new THREE.Color(0xfff5d6);
   renderer.setClearColor(backgroundColor);
@@ -47,8 +47,12 @@ function init() {
 
   // controls = new OrbitControls(camera, renderer.domElement);
 
-  camera.position.set(40, 60, 40);
+  camera.position.set(43, 60, 43);
   camera.lookAt(0, 10, 0);
+
+  // camera.position.set(5, 20, 5);
+  // camera.lookAt(0, 0, 0);
+
 
   effect = new OutlineEffect(renderer);
 
@@ -102,7 +106,7 @@ function addContentPlane(){
   disp.wrapT = THREE.RepeatWrapping;
   disp.repeat.set(1, 1);
 
-  contentPlane = new THREE.Mesh(new THREE.PlaneGeometry(18.5, 17.5), new THREE.MeshStandardMaterial({ map: videoTexture, displacementMap: videoTexture}));
+  contentPlane = new THREE.Mesh(new THREE.PlaneGeometry(18.5, 17.5), new THREE.MeshBasicMaterial({ map: videoTexture, displacementMap: videoTexture}));
   scene.add(contentPlane);
   contentPlane.rotateX(-Math.PI/2);
   contentPlane.rotateZ(Math.PI/27);
@@ -180,3 +184,24 @@ function loop() {
 }
 
 init();
+
+let boxPage = document.getElementById("box");
+
+document.addEventListener("scroll", (event) => {
+
+  // when scroll is greater than window height, show inside
+  // vice versa
+  if (window.scrollY >= window.innerHeight * 1.8){
+    boxPage.style.opacity = 0;
+  }
+  else{
+    boxPage.style.opacity = 1;
+  }
+
+  // camera zoom in as scroll
+  if (window.scrollY < window.innerHeight * 2){
+    let ratio = window.scrollY / (window.innerHeight * 1.8);
+    camera.position.set(43 - 42 * ratio, 60 - 40 * ratio, 43 - 42 * ratio);
+    camera.lookAt(0, 10 - 10 * ratio, 0)
+  }
+});

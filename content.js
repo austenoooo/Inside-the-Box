@@ -42,7 +42,7 @@ function init() {
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-  document.body.appendChild(renderer.domElement);
+  document.getElementById("content").appendChild(renderer.domElement);
 
   let backgroundColor = new THREE.Color(color[0]);
   renderer.setClearColor(backgroundColor);

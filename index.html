@@ -8,9 +8,29 @@
     }
 
     #myVideo{
-      position: absolute;
+      position: fixed;
       z-index: -1;
       visibility: hidden;
+    }
+
+    #box{
+      position: fixed;
+      z-index: 2;
+      opacity: 1;
+      transition: opacity ease-in-out 500ms;
+    }
+
+    #content{
+      position: fixed;
+      z-index: 1;
+    }
+
+    #scroll{
+      position: absolute;
+      z-index: 0;
+      height: 300%;
+      top: 0;
+      width: 100%;
     }
   </style>
   <body>
@@ -29,12 +49,18 @@
     </script>
 
 
-    <!-- <script type="module" src="content.js"></script> -->
+    <script type="module" src="content.js"></script>
     <script type="module" src="script.js"></script>
-
     <video id="myVideo" controls autoplay muted loop width="250" height="250">
       <source src="./textures/content.mp4" type="video/mp4" />
     </video>
+
+    <div id="scroll"></div>
+
+    <div id="box"></div>
+    <div id="content"></div>
+
+    
   
   </body>
 </html>
