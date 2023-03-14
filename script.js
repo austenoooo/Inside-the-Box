@@ -34,7 +34,7 @@ function init() {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
   document.body.appendChild(renderer.domElement);
 
-  let backgroundColor = new THREE.Color(0xfff1c9);
+  let backgroundColor = new THREE.Color(0xfff5d6);
   renderer.setClearColor(backgroundColor);
 
 
@@ -45,7 +45,7 @@ function init() {
     1000
   );
 
-  controls = new OrbitControls(camera, renderer.domElement);
+  // controls = new OrbitControls(camera, renderer.domElement);
 
   camera.position.set(40, 60, 40);
   camera.lookAt(0, 10, 0);
