@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 
 let scene, camera, renderer;
 let controls;
@@ -11,9 +12,13 @@ let fiveTone;
 
 let modelLoader = new GLTFLoader();
 
+let composer;
+
+let effect;
+
 function init() {
   scene = new THREE.Scene();
-  scene.backgroundIntensity = 0.5;
+  // scene.backgroundIntensity = 0.5;
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -33,24 +38,28 @@ function init() {
     1000
   );
 
-  controls = new OrbitControls(camera, renderer.domElement);
+  // controls = new OrbitControls(camera, renderer.domElement);
 
   camera.position.set(40, 60, 40);
   camera.lookAt(0, 10, 0);
 
+  effect = new OutlineEffect(renderer);
+
   // add light
-  const directionalLight = new THREE.DirectionalLight( 0xffffff, 1);
+  const directionalLight = new THREE.DirectionalLight( 0xffffff, 1.8);
   scene.add( directionalLight );
   directionalLight.position.set(40, 60, 40);
   directionalLight.lookAt(0, 0, 0);
 
   // helper functions
   const axesHelper = new THREE.AxesHelper(30);
-  scene.add(axesHelper);
+  // scene.add(axesHelper);
   const gridHelper = new THREE.GridHelper(200, 200);
   // scene.add(gridHelper);
 
   // environmentMap();
+
+  // postProcessing();
 
   loadGradientMap();
 
@@ -113,7 +122,9 @@ function loadBoxModel(){
 
 function loop() {
 
-  renderer.render(scene, camera);
+  // renderer.render(scene, camera);
+  // composer.render();
+  effect.render( scene, camera );
 
   window.requestAnimationFrame(loop);
 }
