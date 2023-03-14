@@ -50,14 +50,10 @@ function init() {
   camera.position.set(43, 60, 43);
   camera.lookAt(0, 10, 0);
 
-  // camera.position.set(5, 20, 5);
-  // camera.lookAt(0, 0, 0);
-
-
   effect = new OutlineEffect(renderer);
 
   // add light
-  const directionalLight = new THREE.DirectionalLight( 0xffffff, 1.8);
+  const directionalLight = new THREE.DirectionalLight( 0xffffff, 2);
   scene.add( directionalLight );
   directionalLight.position.set(40, 60, 40);
   directionalLight.lookAt(0, 0, 0);
@@ -75,8 +71,6 @@ function init() {
   loadGradientMap();
 
   loadBoxModel();
-
-  
 
   // addGround();
 
@@ -176,8 +170,8 @@ function loadBoxModel(){
 
 function loop() {
 
-  renderer.render(scene, camera);
-  // composer.render();
+  // renderer.render(scene, camera);
+  composer.render();
   // effect.render( scene, camera );
 
   window.requestAnimationFrame(loop);
