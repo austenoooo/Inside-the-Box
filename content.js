@@ -1,21 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-// import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-// import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-// import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
-// import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
-// import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
+import { Ball } from "./ball.js";
 
 
 let scene, camera, renderer;
 let controls;
 
 let fiveTone, fourTone, threeTone;
-
-let modelLoader = new GLTFLoader();
 
 let allObjects = new THREE.Group();
 
@@ -28,7 +21,6 @@ let effect;
 
 let composer;
 
-let outlineObjects = [];
 
 let rotate = 0;
 let count = 0;
@@ -87,7 +79,7 @@ function init() {
 
   
   for (let i = 0; i < 100; i++) {
-    createBall();
+    let newBall = new Ball(materials[Math.floor(Math.random() * 3)], allObjects);
   }
   allObjects.position.set(0, 0, 0);
   scene.add(allObjects);
@@ -131,34 +123,7 @@ function postProcessing() {
   loop();
 }
 
-function createBall() {
-  modelLoader.load(
-    "./models/deformed_ball.glb",
-    function (gltf) {
-      let ball = gltf.scene;
-      ball.traverse(function (object) {
-        if (object.isMesh) {
-          // random materials
-          object.material = materials[Math.floor(Math.random() * 3)];
-        }
-      });
-      allObjects.add(ball);
-      ball.position.set(
-        Math.random() * 600 - 300,
-        Math.random() * 400 - 200,
-        Math.random() * 600 - 300
-      );
-      let scale = Math.random() * 30 + 10;
-      ball.scale.set(scale, scale, scale);
-      ball.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI)
-      outlineObjects.push(ball);
-    },
-    undefined,
-    function (e) {
-      console.error(e);
-    }
-  );
-}
+
 
 function loadGradientMap() {
   fiveTone = new THREE.TextureLoader().load("./textures/fiveTone.jpg");
